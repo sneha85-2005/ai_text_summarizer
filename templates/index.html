@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Text Summarizer</title>
+<style>
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #e3f2fd, #ffffff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .container {
+    background: rgba(255,255,255,0.95);
+    width: 700px;
+    padding: 28px 36px;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  }
+  header{
+    display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:18px;
+  }
+  header img{width:48px}
+  header h1{margin:0;color:#1565c0;font-size:22px}
+  textarea{
+    width:100%;height:180px;padding:12px;border-radius:10px;border:1px solid #dcdcdc;font-size:15px;resize:none
+  }
+  .controls{
+    display:flex;justify-content:flex-start;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap
+  }
+  select{
+    padding:6px;border-radius:8px;border:1px solid #ccc
+  }
+  button.primary{
+    background:#1565c0;color:#fff;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-size:15px;
+    transition:0.3s;
+  }
+  button.primary:hover{background:#0d47a1}
+  .result{margin-top:18px}
+  .summary-box{
+    background:#fbfdff;
+    border-radius:10px;
+    padding:14px;
+    border:1px solid #e6eef9;
+    min-height:110px;
+    position: relative;
+    padding-right: 90px; /* make space for copy button */
+    white-space: pre-wrap;
+    font-size: 15px;
+  }
+  .copy-btn{
+    position:absolute;
+    right:12px;
+    top:12px;
+    background:#e3f2fd;
+    border:none;
+    color:#1565c0;
+    padding:6px 10px;
+    border-radius:6px;
+    cursor:pointer;
+  }
+  .copy-btn:hover{background:#bbdefb}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" alt="logo">
+    <h1>AI Text Summarizer</h1>
+  </header>
+
+  <form id="summarizeForm">
+    <textarea name="text" id="textInput" placeholder="Paste or type text here..." required></textarea>
+
+    <div class="controls">
+      <label>
+        Format:
+        <select name="format" id="formatSelect">
+          <option value="paragraph">Paragraph</option>
+          <option value="bullets">Bullet Points</option>
+        </select>
+      </label>
+      <button class="primary" type="submit">Summarize</button>
+    </div>
+  </form>
+
+  <div class="result">
+    <h3>Summary:</h3>
+    <div class="summary-box">
+      <button class="copy-btn" id="copyBtn">Copy</button>
+      <p id="summaryText">No summary yet — click Summarize.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById("summarizeForm");
+  const summaryText = document.getElementById("summaryText");
+  const copyBtn = document.getElementById("copyBtn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    summaryText.textContent = "Summarizing... please wait.";
+    const formData = new FormData(form);
+    const resp = await fetch("/summarize", { method: "POST", body: formData });
+    if (!resp.ok) {
+      summaryText.textContent = "Error: could not get summary.";
+      return;
+    }
+    const text = await resp.text();
+    summaryText.textContent = text;
+  });
+
+  copyBtn.addEventListener("click", () => {
+    const txt = summaryText.textContent;
+    navigator.clipboard.writeText(txt).then(() => {
+      alert("Summary copied to clipboard!");
+    });
+  });
+</script>
+</body>
+</html>
+
