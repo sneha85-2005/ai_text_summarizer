@@ -37,7 +37,7 @@ Generates a short and meaningful summary
 
 Currently processing time may take a bit longer — improvements in performance and accuracy are in progress.
 
-How to Run the project
+## How to Run the project
 
 pip install -r requirements.txt
 python main.py
@@ -50,6 +50,12 @@ python main.py
 
 ### Format 2 – Bullet Summary
 ![ai ](https://github.com/user-attachments/assets/b06e4aeb-308d-44c4-b164-910543c61160)
+
+## 🔭 Future Improvements
+- Make summarization faster using smaller model
+- Add user interface (UI) to upload files
+- Deploy as web app with cloud backend
+
 
 
 
